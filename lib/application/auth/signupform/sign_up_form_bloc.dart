@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 import 'package:todo/core/failures/auth_failure.dart';
-import 'package:todo/domain/repositories/auth_repository.dart';
+import 'package:todo/domain/auth/repositories/auth_repository.dart';
 
 part 'sign_up_form_event.dart';
 part 'sign_up_form_state.dart';

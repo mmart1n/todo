@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:todo/application/auth/signupform/sign_up_form_bloc.dart';
 
-import '../../core/failures/auth_failure.dart';
+import '../../../core/failures/auth_failure.dart';
 import '../entities/user.dart';
 
 abstract class AuthRepository {

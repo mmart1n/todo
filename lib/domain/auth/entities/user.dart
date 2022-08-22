@@ -1,4 +1,4 @@
-import 'package:todo/domain/entities/id.dart';
+import 'package:todo/domain/auth/entities/id.dart';
 
 class CustomUser {
   final UniqueID id;
