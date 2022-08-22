@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^3.4.5
   dartz: ^0.10.1
   auto_route: ^5.0.1
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

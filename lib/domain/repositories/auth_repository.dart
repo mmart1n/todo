@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:todo/application/auth/signupform/sign_up_form_bloc.dart';
 
 import '../../core/failures/auth_failure.dart';
+import '../entities/user.dart';
 
 abstract class AuthRepository {
   Future<Either<AuthFailure, Unit>> registerWithEmailAndPassword(
@@ -11,4 +12,6 @@ abstract class AuthRepository {
       {required String email, required String password});
 
   Future<void> signOut();
+
+  Option<CustomUser> getSignedInUser();
 }

@@ -59,12 +59,15 @@ class SignUpForm extends StatelessWidget {
     final themeData = Theme.of(context);
 
     return BlocConsumer<SignUpFormBloc, SignUpFormState>(
+      listenWhen: (p, c) =>
+          p.authFailureOrSuccessOption != c.authFailureOrSuccessOption,
       listener: (context, state) {
         state.authFailureOrSuccessOption.fold(
           () => {},
           (eitherFailureOrSuccess) => eitherFailureOrSuccess.fold(
             (failure) {
-              // TODO: SnackBar showed twice!
+              // SnackBar showed twice if we remove listenWhen because the code below is executed for each state change
+              // and not only for the authFailureOrSuccessOption!
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 duration: const Duration(microseconds: 900),
                 content: Text(
