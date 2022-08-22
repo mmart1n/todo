@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:todo/application/auth/signupform/sign_up_form_bloc.dart';
+import 'package:todo/core/failures/auth_failure.dart';
 import 'package:todo/presentation/signup/widgets/signin_register_button.dart';
 
 class SignUpForm extends StatelessWidget {
@@ -39,12 +41,40 @@ class SignUpForm extends StatelessWidget {
       }
     }
 
+    String mapFailureMessage(AuthFailure failure) {
+      switch (failure.runtimeType) {
+        case ServerFailure:
+          return "Something went wrong! Please try again!";
+        case EmailAlreadyInUseFailure:
+          return "Email already in use!";
+        case InvalidEmailAndPasswordCombinationFailure:
+          return "Invalid email and password combination!";
+        default:
+          return "Something went wrong! Please try again!";
+      }
+    }
+
     final themeData = Theme.of(context);
 
     return BlocConsumer<SignUpFormBloc, SignUpFormState>(
       listener: (context, state) {
-        // TODO: Navigate to another page (homepage) if auth was success
-        // TODO: show error message if not
+        state.authFailureOrSuccessOption.fold(
+          () => {},
+          (eitherFailureOrSuccess) => eitherFailureOrSuccess.fold(
+            (failure) {
+              // TODO: SnackBar showed twice!
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: const Duration(microseconds: 900),
+                content: Text(
+                  mapFailureMessage(failure),
+                  style: themeData.textTheme.bodyText1,
+                ),
+                backgroundColor: Colors.redAccent,
+              ));
+            },
+            (_) => print("logged in"),
+          ),
+        );
       },
       builder: (context, state) {
         return Form(
@@ -141,6 +171,7 @@ class SignUpForm extends StatelessWidget {
                       password: null,
                     ));
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      duration: const Duration(microseconds: 900),
                       content: Text(
                         "Invalid Input",
                         style: themeData.textTheme.bodyText1,

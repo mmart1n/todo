@@ -1,4 +1,6 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'package:todo/injection.dart' as di;
 import 'package:todo/presentation/signup/signup_page.dart';
 import 'package:todo/theme.dart';
@@ -6,6 +8,7 @@ import 'package:todo/theme.dart';
 void main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // ensure everything is initialized before building widgets
+  await Firebase.initializeApp();
   await di.init();
   runApp(const MyApp());
 }
