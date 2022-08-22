@@ -40,4 +40,9 @@ class AuthRepositoryImpl implements AuthRepository {
       }
     }
   }
+
+  @override
+  Future<void> signOut() => Future.wait([
+        firebaseAuth.signOut(),
+      ]);
 }
