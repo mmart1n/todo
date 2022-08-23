@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:todo/core/failures/todo_failure.dart';
 import 'package:todo/domain/todo/entities/todo.dart';
+import 'package:todo/domain/todo/entities/todo_color.dart';
 import 'package:todo/domain/todo/repositories/todo_repository.dart';
 
 part 'todo_form_event.dart';
@@ -20,6 +21,30 @@ class TodoFormBloc extends Bloc<TodoFormEvent, TodoFormState> {
       } else {
         emit(state);
       }
+    });
+
+    on<ColorChangedEvent>((event, emit) {
+      emit(state.copyWith(
+          todo: state.todo.copyWith(color: TodoColor(color: event.color))));
+    });
+
+    on<SavePressedEvent>((event, emit) async {
+      Either<TodoFailure, Unit>? failureOrSuccess;
+      emit(state.copyWith(isSaving: true, failureOrSuccessOption: none()));
+      if (event.title != null && event.body != null) {
+        final Todo editedTodo =
+            state.todo.copyWith(title: event.title, body: event.body);
+        if (state.isEditing) {
+          failureOrSuccess = await todoRepository.update(editedTodo);
+        } else {
+          failureOrSuccess = await todoRepository.create(editedTodo);
+        }
+      }
+      emit(state.copyWith(
+        isSaving: false,
+        showErrorMessages: true,
+        failureOrSuccessOption: optionOf(failureOrSuccess),
+      ));
     });
   }
 }

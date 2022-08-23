@@ -4,6 +4,8 @@ import 'package:todo/application/todos/todoForm/todo_form_bloc.dart';
 import 'package:todo/domain/todo/entities/todo.dart';
 import 'package:todo/injection.dart';
 import 'package:todo/presentation/routes/router.gr.dart';
+import 'package:todo/presentation/todo_detail/widgets/save_progress_overlay.dart';
+import 'package:todo/presentation/todo_detail/widgets/todo_form.dart';
 
 class TodoDetailPage extends StatelessWidget {
   final Todo? todo;
@@ -16,7 +18,7 @@ class TodoDetailPage extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           sl<TodoFormBloc>()..add(InitializeTodoDetailPage(todo: todo)),
-      child: BlocListener<TodoFormBloc, TodoFormState>(
+      child: BlocConsumer<TodoFormBloc, TodoFormState>(
         listenWhen: (p, c) =>
             p.failureOrSuccessOption != c.failureOrSuccessOption,
         listener: (context, state) {
@@ -32,12 +34,19 @@ class TodoDetailPage extends StatelessWidget {
             ),
           );
         },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(todo == null ? "Create Todo" : "Edit Todo"),
-          ),
-          body: const Placeholder(),
-        ),
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(todo == null ? "Create Todo" : "Edit Todo"),
+            ),
+            body: Stack(
+              children: [
+                const TodoForm(),
+                SaveInProgressOverlay(isSaving: state.isSaving),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

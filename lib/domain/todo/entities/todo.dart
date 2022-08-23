@@ -22,7 +22,7 @@ class Todo {
       title: '',
       body: '',
       done: false,
-      color: TodoColor(color: TodoColor.predefinedColors[5]),
+      color: TodoColor(color: TodoColor.predefinedColors[0]),
     );
   }
 
