@@ -3,13 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:todo/application/auth/authbloc/auth_bloc.dart';
+import 'package:todo/application/todos/controller/controller_bloc.dart';
 import 'package:todo/application/todos/observer/observer_bloc.dart';
+import 'package:todo/core/failures/todo_failure.dart';
 import 'package:todo/injection.dart';
 import 'package:todo/presentation/home/widgets/home_body.dart';
 import 'package:todo/presentation/routes/router.gr.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  String _mapFailureToMessage(TodoFailure todoFailure) {
+    switch (todoFailure.runtimeType) {
+      case InsufficientPermissions:
+        return "You have not the permissions to do that!";
+      default:
+        return "Something went wrong!";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +31,24 @@ class HomePage extends StatelessWidget {
         BlocProvider<ObserverBloc>(
           create: (context) => observerBloc,
         ),
+        BlocProvider<ControllerBloc>(
+          create: (context) => sl<ControllerBloc>(),
+        ),
       ],
       child: MultiBlocListener(
         listeners: [
           BlocListener<AuthBloc, AuthState>(listener: (context, state) {
             if (state is AuthStateUnauthenticated) {
               AutoRouter.of(context).replace(const SignUpPageRoute());
+            }
+          }),
+          BlocListener<ControllerBloc, ControllerState>(
+              listener: (context, state) {
+            if (state is ControllerFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                backgroundColor: Colors.redAccent,
+                content: Text(_mapFailureToMessage(state.todoFailure)),
+              ));
             }
           }),
         ],
