@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/application/auth/authbloc/auth_bloc.dart';
 import 'package:todo/application/todos/observer/observer_bloc.dart';
 import 'package:todo/injection.dart';
+import 'package:todo/presentation/home/widgets/home_body.dart';
 import 'package:todo/presentation/routes/router.gr.dart';
 
 class HomePage extends StatelessWidget {
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
             ),
             title: const Text("Todo"),
           ),
-          body: const Placeholder(),
+          body: const HomeBody(),
         ),
       ),
     );
