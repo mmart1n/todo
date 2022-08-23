@@ -13,21 +13,62 @@ class TodoRepositoryImpl implements TodoRepository {
   TodoRepositoryImpl({required this.firestore});
 
   @override
-  Future<Either<TodoFailure, Unit>> create(Todo todo) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Future<Either<TodoFailure, Unit>> create(Todo todo) async {
+    try {
+      final userDoc = await firestore.userDocument();
+      final todoModel = TodoModel.fromDomain(todo);
+
+      await userDoc.todoCollection.doc(todoModel.id).set(todoModel.toMap());
+
+      return right(unit);
+    } on FirebaseException catch (e) {
+      if (e.code.contains("permission-denied") ||
+          e.code.contains("PERMISSION_DENIED")) {
+        return left(InsufficientPermissions());
+      } else {
+        return left(UnexpectedFailure());
+      }
+    }
   }
 
   @override
-  Future<Either<TodoFailure, Unit>> delete(Todo todo) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Either<TodoFailure, Unit>> update(Todo todo) async {
+    try {
+      final userDoc = await firestore.userDocument();
+      final todoModel = TodoModel.fromDomain(todo);
+
+      await userDoc.todoCollection.doc(todoModel.id).update(todoModel.toMap());
+
+      return right(unit);
+    } on FirebaseException catch (e) {
+      if (e.code.contains("permission-denied") ||
+          e.code.contains("PERMISSION_DENIED")) {
+        // NOT_FOUND as well
+        return left(InsufficientPermissions());
+      } else {
+        return left(UnexpectedFailure());
+      }
+    }
   }
 
   @override
-  Future<Either<TodoFailure, Unit>> update(Todo todo) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<Either<TodoFailure, Unit>> delete(Todo todo) async {
+    try {
+      final userDoc = await firestore.userDocument();
+      final todoModel = TodoModel.fromDomain(todo);
+
+      await userDoc.todoCollection.doc(todoModel.id).delete();
+
+      return right(unit);
+    } on FirebaseException catch (e) {
+      if (e.code.contains("permission-denied") ||
+          e.code.contains("PERMISSION_DENIED")) {
+        // NOT_FOUND as well - if not found we can delete the record from the UI thus it is not in the back end as well
+        return left(InsufficientPermissions());
+      } else {
+        return left(UnexpectedFailure());
+      }
+    }
   }
 
   /// async* - we can emit data in the stream
