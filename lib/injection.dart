@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:todo/application/auth/authbloc/auth_bloc.dart';
 
 import 'package:todo/application/auth/signupform/sign_up_form_bloc.dart';
+import 'package:todo/application/todos/controller/controller_bloc.dart';
 import 'package:todo/application/todos/observer/observer_bloc.dart';
 import 'package:todo/domain/auth/repositories/auth_repository.dart';
 import 'package:todo/domain/todo/repositories/todo_repository.dart';
@@ -33,6 +34,7 @@ Future<void> init() async {
   sl.registerFactory(() => ObserverBloc(
       todoRepository:
           sl())); // factory -> generiert new instance every time; every time we go on the home page we want to emit the initial event
+  sl.registerFactory(() => ControllerBloc(todoRepository: sl()));
 
   // repos
   sl.registerLazySingleton<TodoRepository>(
