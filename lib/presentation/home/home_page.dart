@@ -63,6 +63,16 @@ class HomePage extends StatelessWidget {
             title: const Text("Todo"),
           ),
           body: const HomeBody(),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              AutoRouter.of(context).push(TodoDetailRoute(todo: null));
+            },
+            child: const Icon(
+              Icons.add,
+              size: 26,
+            ),
+          ),
         ),
       ),
     );

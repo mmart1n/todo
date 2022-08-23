@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/application/todos/controller/controller_bloc.dart';
 import 'package:todo/domain/todo/entities/todo.dart';
+import 'package:todo/presentation/routes/router.gr.dart';
 
 class TodoCard extends StatelessWidget {
   final Todo todo;
@@ -51,6 +53,9 @@ class TodoCard extends StatelessWidget {
     final themeData = Theme.of(context);
 
     return InkResponse(
+      onTap: () {
+        AutoRouter.of(context).push(TodoDetailRoute(todo: todo));
+      },
       onLongPress: () {
         final controllerBloc = context.read<ControllerBloc>();
         _showDeleteDialog(

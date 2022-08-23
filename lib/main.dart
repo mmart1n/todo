@@ -19,7 +19,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = r.ApppRouter();
+  final _appRouter = r.AppRouter();
   MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
