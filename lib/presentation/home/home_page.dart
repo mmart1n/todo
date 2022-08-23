@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
           }),
         ],
         child: Scaffold(
-          appBar: AppBar(
+          /*appBar: AppBar(
             leading: IconButton(
               onPressed: () {
                 BlocProvider.of<AuthBloc>(context).add(SignOutPressedEvent());
@@ -61,10 +61,10 @@ class HomePage extends StatelessWidget {
               icon: const Icon(Icons.exit_to_app),
             ),
             title: const Text("Todo"),
-          ),
+          ),*/
           body: const HomeBody(),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
+            backgroundColor: Colors.white,
             onPressed: () {
               AutoRouter.of(context).push(TodoDetailRoute(todo: null));
             },
