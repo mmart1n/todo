@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:todo/application/auth/authbloc/auth_bloc.dart';
 
 import 'package:todo/application/auth/signupform/sign_up_form_bloc.dart';
-import 'package:todo/domain/repositories/auth_repository.dart';
+import 'package:todo/domain/auth/repositories/auth_repository.dart';
 import 'package:todo/infrastructure/repositories/auth_repository_impl.dart';
 
 /// sl == service locator
